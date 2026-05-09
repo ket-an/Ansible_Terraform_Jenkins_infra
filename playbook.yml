@@ -1,0 +1,36 @@
+---
+- name: Configure Developer VM
+  hosts: all
+  become: yes
+  remote_user: ubuntu
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install OpenJDK 21
+      apt:
+        name: openjdk-21-jdk
+        state: present
+
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present
+
+    - name: Verify Java installation
+      command: java --version
+      register: java_version
+
+    - name: Verify Maven installation
+      command: mvn --version
+      register: maven_version
+
+    - name: Print Java version
+      debug:
+        msg: "{{ java_version.stderr }}"
+
+    - name: Print Maven version
+      debug:
+        msg: "{{ maven_version.stdout }}"
