@@ -1,14 +1,8 @@
+# Terraform
 .terraform/
-.terraform.lock.hcl
-
-# State files (contain sensitive data)
 terraform.tfstate
 terraform.tfstate.backup
+tfplan
 
-# SSH Keys (never push private keys)
-*.pem
-*.key
-
-# Mac system files
+# Mac
 .DS_Store
-EOF

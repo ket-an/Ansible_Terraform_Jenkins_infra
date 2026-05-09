@@ -1,25 +1,39 @@
 pipeline {
   agent any
-  parameters {
-    string(name: 'AWS_REGION', defaultValue: 'us-east-1')
-    string(name: 'INSTANCE_TYPE', defaultValue: 't2.micro')
+
+  environment {
+    PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
   }
+
+  parameters {
+    string(name: 'AWS_REGION', defaultValue: 'us-east-1', description: 'AWS Region')
+    string(name: 'INSTANCE_TYPE', defaultValue: 't3.micro', description: 'EC2 Instance Type')
+  }
+
   stages {
     stage('Terraform Init') {
-      steps { sh 'terraform init' }
+      steps {
+        sh 'terraform init'
+      }
+    }
+    stage('Terraform Plan') {
+      steps {
+        sh 'terraform plan -var="aws_region=${AWS_REGION}"'
+      }
     }
     stage('Terraform Apply') {
       steps {
-        sh """
+        sh '''
           terraform apply -auto-approve \
-            -var="aws_region=${params.AWS_REGION}"
-        """
+            -var="aws_region=${AWS_REGION}"
+        '''
       }
     }
   }
+
   post {
     always {
-      sh 'terraform output'
+      sh 'terraform output || true'
     }
   }
 }
