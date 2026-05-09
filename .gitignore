@@ -1,3 +1,14 @@
-./.terraform
-./.terraform.lock.hcl
-./.git
+.terraform/
+.terraform.lock.hcl
+
+# State files (contain sensitive data)
+terraform.tfstate
+terraform.tfstate.backup
+
+# SSH Keys (never push private keys)
+*.pem
+*.key
+
+# Mac system files
+.DS_Store
+EOF
